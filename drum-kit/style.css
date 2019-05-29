@@ -42,8 +42,14 @@ kbd {
 .sound {
   font-size: 1.2rem;
   text-transform: uppercase;
-  letter-space: 1px;
+  letter-spacing: 1px;
   color: #ffc600;
+}
+
+@media only screen and (max-width: 800px) {
+  .keys {
+    flex-flow: column wrap;
+  }
 }
 
 /*# sourceMappingURL=style.css.map */
