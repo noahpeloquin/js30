@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>HTML5 Canvas Drawing</title>
+</head>
+
+<body>
+  <canvas id="draw" width="800" height="800"></canvas>
+  <script>
+    const canvas = document.querySelector('#draw');
+    const ctx = canvas.getContext('2d');
+    var requestAnimationFrame = window.requestAnimationFrame ||
+                                window.mozRequestAnimationFrame ||
+                                window.webkitRequestAnimationFrame ||
+                                window.msRequestAnimationFrame;
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+
+
+    let bladeLength = 162;
+    let startX = 65;
+    let direction = true;
+
+
+    function animationWrapper() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // back circle
+      ctx.strokeStyle = "rgba(51, 51, 51, 1)";
+      ctx.lineWidth = 2.5;
+      roundRect(ctx, 30, 95, 45, 45, {
+        tl: 25,
+        tr: 25,
+        bl: 25,
+        br: 25
+      }, false, true);
+
+      ctx.beginPath();
+      ctx.rect(startX, 80, bladeLength, 2.5);
+      ctx.closePath();
+      ctx.fillStyle = "rgba(51, 51, 51, 1)";
+      ctx.fill();
+
+      // Blade
+      if (bladeLength >= 162 || bladeLength <= 1) {
+        direction = !direction;
+      }
+
+      if (direction) {
+        startX -= 3;
+        bladeLength += 6;
+      } else {
+        startX += 3;
+        bladeLength -= 6;
+      }
+
+      // base of blade
+      ctx.fillStyle = "rgba(51, 51, 51, 1)";
+      roundRect(ctx, 117, 93, 55, 30, {
+        tl: 20,
+        tr: 20
+      }, true, false);
+
+      roundRect(ctx, 140, 80, 10, 30, {
+        tl: 20,
+        tr: 20
+      }, true, false);
+
+      // bottom attachment rails
+      roundRect(ctx, 125, 120, 4, 43, {
+        tr: 3,
+        tl: 3,
+        br: 3,
+        bl: 3
+      }, true, false);
+
+      roundRect(ctx, 165, 120, 4, 43, {
+        tr: 3,
+        tl: 3,
+        br: 3,
+        bl: 3
+      }, true, false);
+
+
+      // dark red base frame
+      ctx.fillStyle = "rgba(185, 44, 44, 1)";
+      roundRect(ctx, 100, 100, 100, 50, {
+        tl: 25,
+        tr: 30,
+        br: 30,
+        bl: 25
+      }, true, false);
+
+      // dark red tail
+      roundRect(ctx, 55, 110, 65, 15, {
+        tl: 5,
+        tr: 5,
+        br: 5,
+        bl: 5
+      }, true, false);
+
+      // lighter red base frame
+      ctx.fillStyle = "rgba(211, 69, 69, 1)";
+      roundRect(ctx, 100, 100, 90, 40, {
+        tl: 25,
+        tr: 30,
+        br: 30,
+        bl: 30
+      }, true, false);
+
+      // lighter red tail
+      roundRect(ctx, 55, 110, 65, 10, {
+        tl: 5,
+        tr: 5,
+        br: 5,
+        bl: 5
+      }, true, false);
+
+      // orange circle
+      ctx.fillStyle = "rgb(255, 184, 77)";
+      roundRect(ctx, 45, 110, 15, 15, {
+        tl: 7,
+        tr: 7,
+        bl: 7,
+        br: 7
+      }, true, false);
+
+      // window middle
+      ctx.fillStyle = "rgba(51, 51, 51, 1)";
+      roundRect(ctx, 150, 105, 25, 25, {
+        tl: 10,
+        tr: 5,
+        bl: 10
+      }, true, false);
+
+      // window front
+      roundRect(ctx, 178, 105, 23, 25, {
+        tr: 20,
+        bl: 10,
+        br: 10
+      }, true, false);
+
+      // Bottom rail
+      roundRect(ctx, 95, 160, 105, 4, {
+        tr: 3,
+        tl: 3,
+        br: 3,
+        bl: 3
+      }, true, false);
+
+
+      requestAnimationFrame(animationWrapper);
+    }
+    animationWrapper();
+
+
+
+    function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
+      if (typeof stroke == 'undefined') {
+        stroke = true;
+      }
+      if (typeof radius === 'undefined') {
+        radius = 5;
+      }
+      if (typeof radius === 'number') {
+        radius = { tl: radius, tr: radius, br: radius, bl: radius };
+      } else {
+        var defaultRadius = { tl: 0, tr: 0, br: 0, bl: 0 };
+        for (var side in defaultRadius) {
+          radius[side] = radius[side] || defaultRadius[side];
+        }
+      }
+      ctx.beginPath();
+      ctx.moveTo(x + radius.tl, y);
+      ctx.lineTo(x + width - radius.tr, y);
+      ctx.quadraticCurveTo(x + width, y, x + width, y + radius.tr);
+      ctx.lineTo(x + width, y + height - radius.br);
+      ctx.quadraticCurveTo(x + width, y + height, x + width - radius.br, y + height);
+      ctx.lineTo(x + radius.bl, y + height);
+      ctx.quadraticCurveTo(x, y + height, x, y + height - radius.bl);
+      ctx.lineTo(x, y + radius.tl);
+      ctx.quadraticCurveTo(x, y, x + radius.tl, y);
+      ctx.closePath();
+      if (fill) {
+        ctx.fill();
+      }
+      if (stroke) {
+        ctx.stroke();
+      }
+
+    }
+  </script>
+
+</body>
+
+</html>
